@@ -1,9 +1,9 @@
 [project]
-name = "nanodqn"
-version = "0.3.0"
+name = "unified-bootstrapped-dqn-scaling"
+version = "1.0.0"
 authors = [{ name="Roman Knyazhitskiy", email="dqn.scaling.laws@knyaz.tech" }]
 license = "MIT"
-description = "An implementation for DQN Scaling Laws BSc Thesis"
+description = "Official implementation of 'A Unified Scaling Law for Bootstrapped DQNs'"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
