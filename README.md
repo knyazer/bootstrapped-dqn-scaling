@@ -1,4 +1,4 @@
-# A Unified Scaling Law for Bootstrapped DQNs
+# A Unified Scaling Law of Bootstrapped DQNs
 
 ![Bootstrap Ensemble Convergence](docs/pretty-bootstrapped-convergence-illustration.svg)
 
