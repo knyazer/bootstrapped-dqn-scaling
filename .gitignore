@@ -1,0 +1,12 @@
+wandb
+videos
+outputs
+results
+results*/
+aux_results
+plots/*svg
+plots/pdf
+*.zip
+*csv
+.jax_cache
+.*.bck

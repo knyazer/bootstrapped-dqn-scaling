@@ -1,0 +1,34 @@
+[project]
+name = "nanodqn"
+version = "0.3.0"
+authors = [{ name="Roman Knyazhitskiy", email="dqn.scaling.laws@knyaz.tech" }]
+license = "MIT"
+description = "An implementation for DQN Scaling Laws BSc Thesis"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "wandb",
+    "jax[cuda12]", # nvidia support by default
+    "optax",
+    "tqdm",
+    "equinox",
+    "jaxtyping",
+    "pillow",
+    "seaborn",
+    "gymnax",
+]
+classifiers = [
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+
+[tool.ruff]
+line-length = 100
+
+[tool.uv.sources]
+gymnax = { git = "https://github.com/knyazer/gymnax", branch = "equiv" }
