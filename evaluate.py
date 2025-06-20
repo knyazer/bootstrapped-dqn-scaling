@@ -495,7 +495,7 @@ def plot_diversity_collapse():
 
     # 4. Final plot styling for publication
     ax.set_xlabel("Training Episodes")
-    ax.set_ylabel("Q-Diversity (higher is better)")
+    ax.set_ylabel("Q-Diversity")
     ax.tick_params(axis="both", which="major")
     ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.15), ncol=2)
     ax.grid(True, which="both", linestyle=":", linewidth=0.6)
