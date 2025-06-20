@@ -84,7 +84,7 @@ from main import schedule_runs, Config
 
 # Run scaling study
 results = schedule_runs(
-    N=32,                    # 32 random seeds
+    N=32,                    # 32 random seeds, automatically sharded over all the devices
     cfg=Config(
         kind="bootrp",
         ensemble_size=10,
@@ -120,7 +120,7 @@ Config(
 
     # Training setup
     num_episodes=50_000,       # Episode budget
-    batch_size=64,             # Training batch size
+    batch_size=64,             # Training batch size (auto-scaled by K)
     lr=2e-4,                   # Learning rate (auto-scaled by K)
 
     # Environment
@@ -175,6 +175,8 @@ This U-shaped residual pattern reveals the model's limitations: it overestimates
 |-----------|-------------------|--------|------------|
 | BDQN      | 0.80 ± 0.01      | 0.84   | 4.1        |
 | RP-BDQN   | 0.87 ± 0.02      | 0.69   | 8.1        |
+
+The $R^2$ values indicate that the model captures over-all trend well, while dispersion values indicate that there is too much variance that is unexplained by the model - which implies the model fits the data quite poorly. [Here is a wikipedia page about dispersion.](https://en.wikipedia.org/wiki/Reduced_chi-squared_statistic)
 
 ### Performance Boundaries
 
