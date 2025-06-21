@@ -324,7 +324,7 @@ def _fit_psi(df: pd.DataFrame, kind: str, bootstrap_uncertainty: bool = False):
 
     if bootstrap_uncertainty:
         # Bootstrap resampling
-        n_bootstrap = 50
+        n_bootstrap = 100
         bootstrap_psis = []
 
         for _ in range(n_bootstrap):
@@ -336,8 +336,8 @@ def _fit_psi(df: pd.DataFrame, kind: str, bootstrap_uncertainty: bool = False):
         bootstrap_psis = np.array(bootstrap_psis)
 
         # Compute 80% confidence interval (10th and 90th percentiles)
-        ci_lower = np.percentile(bootstrap_psis, 10)
-        ci_upper = np.percentile(bootstrap_psis, 90)
+        ci_lower = np.percentile(bootstrap_psis, 2.5)
+        ci_upper = np.percentile(bootstrap_psis, 97.5)
 
         return psi, mse, dispersion_factor, r2, (ci_lower, ci_upper)
     else:
