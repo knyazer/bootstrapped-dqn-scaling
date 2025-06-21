@@ -4,7 +4,7 @@
 
 This repository implements **Bootstrapped DQN (BDQN)** and **Randomized-Prior BDQN (RP-BDQN)** in JAX, supporting the research findings presented in our paper *"A Unified Scaling Law for Bootstrapped DQNs"*. The implementation is designed for large-scale empirical studies of ensemble-based exploration methods in deep reinforcement learning.
 
-## 🔬 Research Overview
+## Research Overview
 
 Our work presents the first comprehensive empirical study (>40,000 configurations) of bootstrapped DQN methods, revealing a unified scaling law that governs their convergence behavior:
 
@@ -26,7 +26,7 @@ Where:
 
 ![Scaling Law Results](plots/frontier_and_heatmaps.png)
 
-## 🏗️ Architecture
+## Architecture
 
 ### Core Components
 
@@ -42,7 +42,7 @@ Where:
 2. **`bootrp`** - Bootstrapped DQN with Randomized Priors
 3. **`eps`** - Epsilon-greedy baseline (single network)
 
-## ⚡ Quick Start
+## Quick Start
 
 ### Installation
 
@@ -51,7 +51,7 @@ Where:
 git clone https://github.com/yourusername/nanodqn.git
 cd nanodqn
 
-# Install with uv (recommended)
+# Install with uv (strongly recommended)
 uv sync
 
 # Or with pip
@@ -96,7 +96,7 @@ results = schedule_runs(
 print(f"Success rate: {results['weak_convergence'].mean():.2f}")
 ```
 
-## 📊 DeepSea Environment
+## DeepSea Environment
 
 We use the **DeepSea(n)** environment as our testbed:
 
@@ -107,7 +107,7 @@ We use the **DeepSea(n)** environment as our testbed:
 
 The environment parameterizes exploration difficulty through a single interpretable parameter, making it ideal for systematic scaling studies.
 
-## 🔬 Experimental Pipeline
+## Experimental Pipeline
 
 ### Configuration
 
@@ -167,7 +167,7 @@ The scaling law shows systematic deviations at extreme ensemble sizes:
 
 This U-shaped residual pattern reveals the model's limitations: it overestimates performance for both very small (K=1) and very large ensembles, working best in the middle range.
 
-## 📈 Key Results
+## Key Results
 
 ### Scaling Law Parameters
 
@@ -196,7 +196,7 @@ Our analysis reveals that **ensemble diversity** is the key differentiator:
 
 The plot above shows how Q-diversity (ensemble disagreement) evolves during training. RP-BDQN maintains higher diversity throughout training, while BDQN shows premature collapse in failed runs.
 
-## 🛠️ Advanced Usage
+## Advanced Usage
 
 ### Custom Environments
 
@@ -246,11 +246,11 @@ Our robustness analysis across different hyperparameter settings shows that the 
 
 The effectiveness parameter ψ remains consistently higher for RP-BDQN across learning rates, replay buffer sizes, and prior scales, confirming the robustness of our findings.
 
-## 🔧 Performance Optimization
+## Performance Optimization
 
 ### JAX Configuration
 
-The implementation includes several JAX optimizations:
+The implementation includes several JAX optimizations, that can be found in `main.py`:
 
 ```python
 # Memory optimization
@@ -259,13 +259,13 @@ os.environ["XLA_PYTHON_CLIENT_MEM_FRACTION"] = "0.95"
 # Compilation parallelism
 os.environ["XLA_FLAGS"] = "--xla_gpu_force_compilation_parallelism=8"
 
-# Persistent compilation cache
+# Persistent compilation cache (as of current JAX version is largely unusable)
 jax.config.update("jax_compilation_cache_dir", ".jax_cache")
 ```
 
 ### Multi-GPU Scaling
 
-The implementation uses DDP via jax sharding by default!
+The implementation uses DDP via jax sharding by default.
 
 ```python
 # Automatic device utilization
@@ -277,9 +277,9 @@ if jax.device_count() > 1:
     sharding = jax.sharding.NamedSharding(mesh, P("x"))
 ```
 
-## 📚 Citation
+## Citation
 
-If you use this code in your research, please cite our paper:
+If you use this code in your research, please cite our paper (that is going to be on arXiv soon):
 
 ```bibtex
 @article{knyazhitskiy2025unified,
@@ -290,7 +290,7 @@ If you use this code in your research, please cite our paper:
 }
 ```
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Areas of particular interest:
 
@@ -299,13 +299,13 @@ We welcome contributions! Areas of particular interest:
 - Theoretical analysis of the ψ parameter
 - Computational optimizations
 
-## 📋 Requirements
+## Requirements
 
 - Python ≥ 3.10
 - JAX with CUDA support (for GPU acceleration)
 - See `pyproject.toml` for complete dependencies
 
-## 🏃‍♂️ Reproducibility
+## Reproducibility
 
 All experiments are designed for complete reproducibility:
 
@@ -314,11 +314,13 @@ All experiments are designed for complete reproducibility:
 - **Comprehensive logging** of all hyperparameters and metrics
 - **Version-controlled results** with automatic experiment tracking
 
-## 📝 License
+To reproduce all the plots in the paper you should simply run `uv run main.py && uv run evaluate.py` which will generate all the figures used in the paper. The whole suite should take about 60 hours on RTX4090.
+
+## License
 
 MIT License - see LICENSE file for details.
 
-## 🙋‍♂️ Support
+## Support
 
 For questions about the implementation or research:
 
