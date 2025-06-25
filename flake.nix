@@ -47,14 +47,14 @@
 
             # Set up environment variables for CUDA if available
             export CUDA_PATH=${pkgs.cudatoolkit}
-            export LD_LIBRARY_PATH=${pkgs.cudatoolkit}/lib:$LD_LIBRARY_PATH
+            export LD_LIBRARY_PATH=${pkgs.cudatoolkit}/lib:${pkgs.stdenv.cc.cc.lib}/lib/:$LD_LIBRARY_PATH
 
             # Install the package in development mode using uv
             if [ -f "pyproject.toml" ]; then
               echo "Installing/syncing Python dependencies with uv..."
-              uv pip install -e .
+              uv sync
               echo "Dependencies installed."
-              echo "JAX version: $(python -c 'import jax; print(jax.__version__)' 2>/dev/null || echo 'jax not found')"
+              echo "JAX version: $( uv run python -c 'import jax; print(jax.__version__)' 2>/dev/null || echo 'jax not found')"
             fi
           '';
 
