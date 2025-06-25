@@ -44,21 +44,34 @@ Where:
 
 ## Quick Start
 
-### Installation
+This section provides the quickest way to get started with running the experiments and generating results.
 
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/nanodqn.git
-cd nanodqn
+### Prerequisites
 
-# Install with uv (strongly recommended)
-uv sync
+Before you begin, you will need to install `uv`, a fast Python package installer and resolver. You can find the official installation instructions [here](https://github.com/astral-sh/uv).
 
-# Or with pip
-pip install -e .
-```
+### Dependency Management with `uv`
 
-### Basic Usage
+We use `uv` to manage Python dependencies, which are defined in `pyproject.toml`. Doing e.g. `uv run ...` automatically verifies and installs all the dependencies, but you can trigger that explicitly with `uv sync`.
+
+### Running Experiments
+
+1.  **Generate Results:**
+    To run the experiments and generate the raw data, execute the following command. This will create a `results` folder containing the output of all the experimental runs. *This will take around 48 hours on 1xRTX4090.*
+    ```bash
+    uv run main.py
+    ```
+
+2.  **Generate Plots:**
+    Once the experimental runs are complete, you can generate all the plots and figures from the paper using the data in the `results` folder. Run the following command:
+    ```bash
+    uv run evaluate.py
+    ```
+    This will populate the `plots` folder with the generated visualizations.
+
+### Basic Usage Example
+
+Here is a simple example of how to run a single training configuration from within a Python script:
 
 ```python
 from main import main, Config
@@ -315,6 +328,20 @@ All experiments are designed for complete reproducibility:
 - **Version-controlled results** with automatic experiment tracking
 
 To reproduce all the plots in the paper you should simply run `uv run main.py && uv run evaluate.py` which will generate all the figures used in the paper. The whole suite should take about 60 hours on RTX4090.
+
+### Nix Environment
+
+This project uses Nix to provide a reproducible development environment. To get started, install Nix and then run:
+
+```bash
+nix develop
+```
+
+This command will drop you into a shell with all the necessary dependencies, including CUDA and Python, already installed and configured. The CUDA support is generally pretty depressing with Nix, so we recommend you don't really count on it that much. In general, you should use Nix as a last resort of reproducibility.
+
+### Runpod
+
+We used runpod to run some of the experimets with our own wrapper over the cli. Consult the `.justfile` if you are interested.
 
 ## License
 

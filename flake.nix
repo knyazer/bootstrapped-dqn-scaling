@@ -9,46 +9,24 @@
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = nixpkgs.legacyPackages.${system};
+        pkgs = import nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        };
 
-        python = pkgs.python311;
+        python = pkgs.python312;
 
-        pythonEnv = python.withPackages (ps: with ps; [
-          # Core dependencies from pyproject.toml
-          wandb
-          jax
-          jaxlib
-          optax
-          tqdm
-          equinox
-          jaxtyping
-          pillow
-          seaborn
-
-          # Additional useful packages for development
-          pip
-          setuptools
-          wheel
-
-          # For Jupyter notebooks if needed
-          jupyter
-          ipython
-
-          # Testing and linting
-          pytest
-          ruff
-        ]);
+        pythonEnv = python;
 
       in
       {
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
-            pythonEnv
+            python
             uv
 
             # CUDA support (if available)
             cudatoolkit
-            cudnn
 
             # Development tools
             git
@@ -66,16 +44,17 @@
           shellHook = ''
             echo "NanoDQN development environment"
             echo "Python: $(python --version)"
-            echo "JAX version: $(python -c 'import jax; print(jax.__version__)')"
 
             # Set up environment variables for CUDA if available
             export CUDA_PATH=${pkgs.cudatoolkit}
-            export LD_LIBRARY_PATH=${pkgs.cudatoolkit}/lib:${pkgs.cudnn}/lib:$LD_LIBRARY_PATH
+            export LD_LIBRARY_PATH=${pkgs.cudatoolkit}/lib:$LD_LIBRARY_PATH
 
-            # Install the package in development mode
+            # Install the package in development mode using uv
             if [ -f "pyproject.toml" ]; then
-              echo "Installing package in development mode..."
-              pip install -e .
+              echo "Installing/syncing Python dependencies with uv..."
+              uv pip install -e .
+              echo "Dependencies installed."
+              echo "JAX version: $(python -c 'import jax; print(jax.__version__)' 2>/dev/null || echo 'jax not found')"
             fi
           '';
 
@@ -84,7 +63,6 @@
             pkgs.stdenv.cc.cc
             pkgs.zlib
             pkgs.cudatoolkit
-            pkgs.cudnn
           ];
         };
 
@@ -97,22 +75,7 @@
 
           pyproject = true;
 
-          build-system = with python.pkgs; [
-            setuptools
-            wheel
-          ];
-
-          dependencies = with python.pkgs; [
-            wandb
-            jax
-            jaxlib
-            optax
-            tqdm
-            equinox
-            jaxtyping
-            pillow
-            seaborn
-          ];
+          # build-system and dependencies are managed by uv, see devShells.default.shellHook
 
           # Skip tests for now since we don't know the test setup
           doCheck = false;
