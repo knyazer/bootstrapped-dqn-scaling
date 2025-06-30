@@ -329,6 +329,8 @@ All experiments are designed for complete reproducibility:
 
 To reproduce all the plots in the paper you should simply run `uv run main.py && uv run evaluate.py` which will generate all the figures used in the paper. The whole suite should take about 60 hours on RTX4090.
 
+If you just want to generate plots, or analyze the results without spending compute, you might want use the following [Google Drive link](https://drive.google.com/file/d/1w1v6MHGFrMuR0Jyd0KbkgqRujxYO9OO4/view?usp=sharing) to access an archive with all of our results. You should unpack it into the root of the repository, and then run `uv run evaluate.py` to produce all the plots that were used in the paper. _Note: after unpacking, make sure the folder `results` is on the same level as this `README.md` file._
+
 ### Nix Environment
 
 This project uses Nix to provide a reproducible development environment. To get started, install Nix and then run:
