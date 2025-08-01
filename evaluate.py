@@ -663,8 +663,8 @@ if __name__ == "__main__":
     plot_hyperparameter_sweep()
     plot_diversity_collapse()
     plot_residuals()
-    """
     plot_frontier_and_heatmaps()
+    """
     for hp, values, kinds in hp_and_ranges:
         for v in values:
             plot_frontier_and_heatmaps(

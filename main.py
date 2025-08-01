@@ -490,7 +490,7 @@ def exp_sweep():
                         print(f"Setting new full hardness: {hardness}")
                         last_full_hardness = hardness
 
-    for beta in [1.0, 2.0, 3.0, 5.0, 7.0, 9.0, 12.0, 15.0, 20.0, 25.0]:
+    for beta in [1.0, 5.0, 10.0]:
         run(["bootrp"], prior_scale=beta)
     run(["boot"])
 
