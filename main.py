@@ -83,9 +83,9 @@ def main(key: PRNGKeyArray = None, cfg: Config = Config(), debug: bool = False):
     obs, state = jax.vmap(lambda k: env.reset(k, env_params))(jr.split(reset_key, cfg.num_envs))
     action_space = env.action_space(env_params)  # type: ignore
 
-    assert "n" in action_space.__dict__, (
-        "The environment is not discrete, or maybe incorrectly initialized"
-    )
+    assert (
+        "n" in action_space.__dict__
+    ), "The environment is not discrete, or maybe incorrectly initialized"
     act_size = action_space.__dict__.get("n", 2)
     single_obs = obs[0]
     obs_size = single_obs.size
@@ -490,8 +490,9 @@ def exp_sweep():
                         print(f"Setting new full hardness: {hardness}")
                         last_full_hardness = hardness
 
-    for beta in [1.0, 5.0, 10.0]:
+    for beta in [1.0, 2.0, 3.0, 5.0, 7.0, 9.0, 12.0, 15.0, 20.0, 25.0]:
         run(["bootrp"], prior_scale=beta)
+    run(["boot"])
 
     for lr in [8e-5, 5e-4, 1e-3]:
         run(["boot", "bootrp"], lr=lr)

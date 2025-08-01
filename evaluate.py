@@ -11,7 +11,10 @@ from scipy.optimize import minimize_scalar
 from helpers import df_from, RUN_NAME
 import matplotlib.gridspec as gridspec
 
-plt.rcParams.update({"font.size": 7})
+FONT_BIG = 6
+FONT_SMALL = 5
+
+plt.rcParams.update({"font.size": FONT_BIG})
 # This is the most important part.
 plt.rcParams.update(
     {
@@ -27,6 +30,13 @@ plt.rcParams.update(
 )
 
 plt.style.use("seaborn-v0_8-whitegrid")
+
+# Common figure width for single-column plots
+SINGLE_COLUMN_WIDTH = 2.75
+
+# Font sizes
+FONT_BIG = 6
+FONT_SMALL = 5
 
 
 @ft.lru_cache
@@ -350,7 +360,9 @@ def plot_residuals():
     # Use a clean style suitable for papers
     agg = make_agg(RUN_NAME)
 
-    fig, ax = plt.subplots(1, 1, figsize=(5.5, 3), tight_layout=True)  # Paper-ready figure size
+    fig, ax = plt.subplots(
+        1, 1, figsize=(SINGLE_COLUMN_WIDTH, SINGLE_COLUMN_WIDTH * 1.09), tight_layout=True
+    )
 
     kind_map = {"boot": "BDQN", "bootrp": "RP-BDQN"}
     # Use a color-blind friendly and distinct palette
@@ -394,11 +406,11 @@ def plot_residuals():
     ax.axhline(0, color="black", linestyle="--", linewidth=1.2, zorder=1)
 
     # *** NEW: Add vertical line to separate K=1 ***
-    ax.axvline(1, color="red", linestyle="--", linewidth=1.2, zorder=1, label="K=1 (Pure DQN)")
+    ax.axvline(1, color="red", linestyle="--", linewidth=1.2, zorder=1, label="K=1 (Greedy)")
 
     # Formal, clear labels
-    ax.set_xlabel("Ensemble Size, $K$")
-    ax.set_ylabel("Residual ($P_{pred} - P_{obs}$)")
+    ax.set_xlabel("Ensemble Size, $K$", fontsize=FONT_BIG)
+    ax.set_ylabel("Residual ($P_{pred} - P_{obs}$)", fontsize=FONT_BIG)
 
     # Adjust ticks and legend
     ax.tick_params(axis="both", which="major")
@@ -427,7 +439,9 @@ def plot_diversity_collapse():
     df_agg = make_agg(RUN_NAME)
     df_critical = df_agg.query("8 <= hardness <= 12 and 3 <= ensemble_size <= 6").copy()
 
-    fig, ax = plt.subplots(figsize=(5.5, 3), tight_layout=True)
+    fig, ax = plt.subplots(
+        figsize=(SINGLE_COLUMN_WIDTH, SINGLE_COLUMN_WIDTH * 1.2), tight_layout=True
+    )
 
     # 2. Setup aesthetics and loop variables
     kind_map = {"boot": "BDQN", "bootrp": "RP-BDQN"}
@@ -486,8 +500,8 @@ def plot_diversity_collapse():
             )
 
     # 4. Final plot styling for publication
-    ax.set_xlabel("Training Episodes")
-    ax.set_ylabel("Q-Diversity")
+    ax.set_xlabel("Training Episodes", fontsize=FONT_BIG)
+    ax.set_ylabel("Q-Diversity", fontsize=FONT_BIG)
     ax.tick_params(axis="both", which="major")
     ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.15), ncol=2)
     ax.grid(True, which="both", linestyle=":", linewidth=0.6)
@@ -514,7 +528,7 @@ hp_and_ranges = [
 def plot_hyperparameter_sweep():
     df_agg = make_agg("sweep")
 
-    fig = plt.figure(figsize=(5.5, 2.2))
+    fig = plt.figure(figsize=(SINGLE_COLUMN_WIDTH, SINGLE_COLUMN_WIDTH * 0.8))
     gs = gridspec.GridSpec(
         2,
         3,
@@ -523,7 +537,7 @@ def plot_hyperparameter_sweep():
         top=0.98,
         left=0.08,
         right=0.95,
-        wspace=0.5,
+        wspace=0.6,
         hspace=0.05,
         height_ratios=[10, 1],
     )
@@ -596,24 +610,25 @@ def plot_hyperparameter_sweep():
                         f"{psi:.3f}",
                         ha="center",
                         va="bottom",
-                        fontsize=6,
+                        fontsize=FONT_SMALL,
                     )
 
         if hp == "lr":
-            ax.set_xlabel("Learning Rate")
+            ax.set_xlabel("Learning Rate", fontsize=FONT_BIG)
         if hp == "rb_size":
-            ax.set_xlabel("Replay Buffer Size")
+            ax.set_xlabel("Replay Buffer Size", fontsize=FONT_BIG)
         if hp == "prior_scale":
-            ax.set_xlabel("Prior Scale")
-        ax.set_ylabel("Fitted $\psi$")
+            ax.set_xlabel("Prior Scale", fontsize=FONT_BIG)
+        ax.set_ylabel("Fitted $\psi$", labelpad=1, fontsize=FONT_BIG)
         ax.set_xticks(x_pos)
+        ax.tick_params(axis="y", labelsize=FONT_SMALL)
 
         if hp == "rb_size":
-            ax.set_xticklabels([f"{int(v / 1000)}K" for v in values])
+            ax.set_xticklabels([f"{int(v / 1000)}K" for v in values], fontsize=FONT_SMALL)
         elif hp == "lr":
-            ax.set_xticklabels([f"{v:.0e}" for v in values])
+            ax.set_xticklabels([f"{v:.0e}" for v in values], fontsize=FONT_SMALL)
         else:
-            ax.set_xticklabels([f"{v}" for v in values])
+            ax.set_xticklabels([f"{v}" for v in values], fontsize=FONT_SMALL)
 
         ax.grid(True, alpha=0.3)
         ax.set_ylim(0, max(ax.get_ylim()[1] + 0.1, 0.1))
@@ -646,11 +661,13 @@ def plot_hyperparameter_sweep():
 
 if __name__ == "__main__":
     plot_hyperparameter_sweep()
-    plot_frontier_and_heatmaps()
     plot_diversity_collapse()
     plot_residuals()
+    """
+    plot_frontier_and_heatmaps()
     for hp, values, kinds in hp_and_ranges:
         for v in values:
             plot_frontier_and_heatmaps(
                 agg=make_agg("sweep").query(f"{hp} == {v}"), kinds=kinds, plot_prefix=f"{hp}_eq_{v}"
             )
+    """
