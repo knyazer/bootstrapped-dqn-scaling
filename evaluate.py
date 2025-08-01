@@ -361,7 +361,7 @@ def plot_residuals():
     agg = make_agg(RUN_NAME)
 
     fig, ax = plt.subplots(
-        1, 1, figsize=(SINGLE_COLUMN_WIDTH, SINGLE_COLUMN_WIDTH * 1.09), tight_layout=True
+        1, 1, figsize=(SINGLE_COLUMN_WIDTH, SINGLE_COLUMN_WIDTH * 0.8), tight_layout=True
     )
 
     kind_map = {"boot": "BDQN", "bootrp": "RP-BDQN"}
@@ -440,7 +440,7 @@ def plot_diversity_collapse():
     df_critical = df_agg.query("8 <= hardness <= 12 and 3 <= ensemble_size <= 6").copy()
 
     fig, ax = plt.subplots(
-        figsize=(SINGLE_COLUMN_WIDTH, SINGLE_COLUMN_WIDTH * 1.2), tight_layout=True
+        figsize=(SINGLE_COLUMN_WIDTH, SINGLE_COLUMN_WIDTH * 0.8), tight_layout=True
     )
 
     # 2. Setup aesthetics and loop variables
@@ -535,7 +535,7 @@ def plot_hyperparameter_sweep():
         figure=fig,
         bottom=0.2,
         top=0.98,
-        left=0.08,
+        left=0.12,
         right=0.95,
         wspace=0.6,
         hspace=0.05,
@@ -619,7 +619,7 @@ def plot_hyperparameter_sweep():
             ax.set_xlabel("Replay Buffer Size", fontsize=FONT_BIG)
         if hp == "prior_scale":
             ax.set_xlabel("Prior Scale", fontsize=FONT_BIG)
-        ax.set_ylabel("Fitted $\psi$", labelpad=1, fontsize=FONT_BIG)
+        ax.set_ylabel("Fitted $\psi$", labelpad=2, fontsize=FONT_BIG)
         ax.set_xticks(x_pos)
         ax.tick_params(axis="y", labelsize=FONT_SMALL)
 
